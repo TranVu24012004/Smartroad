@@ -1,0 +1,137 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  FaHome,
+  FaSignOutAlt,
+  FaMap,
+  FaImage,
+  FaChartArea,
+  FaAddressCard,
+  FaTable,
+  FaLeaf,
+  FaUsers,
+} from "react-icons/fa";
+import { Camera } from "lucide-react";
+
+const Sidebar = ({ activeTab, setActiveTab, userName }) => {
+  const navigate = useNavigate();
+  const userRole = localStorage.getItem("roadVisionRole") || "citizen";
+
+  const adminNavItems = [
+    { name: "Dashboard", label: "Bảng điều khiển", path: "/admin", icon: <FaHome className="text-lg" /> },
+    { name: "Users", label: "Người dùng", path: "/admin", icon: <FaUsers className="text-lg" /> },
+    { name: "Image Uploads", label: "Ảnh tải lên", path: "/authority", icon: <FaImage className="text-lg" /> },
+    { name: "Map", label: "Bản đồ", path: "/map", icon: <FaMap className="text-lg" /> },
+    { name: "View Reports", label: "Báo cáo", path: "/report", icon: <FaChartArea className="text-lg" /> },
+    { name: "View Feedbacks", label: "Phản hồi", path: "/view", icon: <FaAddressCard className="text-lg" /> },
+    { name: "Logout", label: "Đăng xuất", path: "/", icon: <FaSignOutAlt className="text-lg" /> },
+  ];
+
+  const authorityNavItems = [
+    { name: "Dashboard", label: "Bảng điều khiển", path: "/admin", icon: <FaHome className="text-lg" /> },
+    { name: "Image Uploads", label: "Ảnh tải lên", path: "/authority", icon: <FaImage className="text-lg" /> },
+    { name: "Map", label: "Bản đồ", path: "/map", icon: <FaMap className="text-lg" /> },
+    { name: "View Reports", label: "Báo cáo", path: "/report", icon: <FaChartArea className="text-lg" /> },
+    { name: "View Feedbacks", label: "Phản hồi", path: "/view", icon: <FaAddressCard className="text-lg" /> },
+    { name: "Logout", label: "Đăng xuất", path: "/", icon: <FaSignOutAlt className="text-lg" /> },
+  ];
+
+  const citizenNavItems = [
+    { name: "Dashboard", label: "Bảng điều khiển", path: "/user", icon: <FaHome className="text-lg" /> },
+    { name: "Camera", label: "Máy ảnh", path: "/user", icon: <Camera className="text-lg" /> },
+    { name: "History", label: "Lịch sử", path: "/user", icon: <FaTable className="text-lg" /> },
+    { name: "Logout", label: "Đăng xuất", path: "/", icon: <FaSignOutAlt className="text-lg" /> },
+  ];
+
+  let navItems = citizenNavItems;
+  if (userRole === "admin") navItems = adminNavItems;
+  else if (userRole === "authority") navItems = authorityNavItems;
+
+  const handleTabChange = (tab) => {
+    const navItem = navItems.find((item) => item.name === tab);
+
+    if (tab === "Logout") {
+      localStorage.removeItem("roadVisionUserId");
+      localStorage.removeItem("roadVisionUserName");
+      localStorage.removeItem("roadVisionRole");
+      localStorage.removeItem("user");
+      localStorage.removeItem("roadVisionUserType");
+      localStorage.removeItem("roadVisionIsAdmin");
+      navigate("/");
+      return;
+    }
+
+    if (setActiveTab) {
+      setActiveTab(tab);
+    }
+
+    if (navItem && navItem.path !== window.location.pathname) {
+      navigate(navItem.path);
+    }
+  };
+
+  const getInitial = (name) => (name && name.length > 0 ? name.charAt(0).toUpperCase() : "U");
+
+  const displayRole =
+    userRole === "admin"
+      ? "Quản trị viên"
+      : userRole === "authority"
+        ? "Cơ quan chức năng"
+        : "Người dân";
+
+  return (
+    <div className="w-64 min-w-[16rem] bg-white shadow-lg h-screen fixed left-0 top-0 overflow-y-auto z-30 border-r border-green-100">
+      <div className="p-6 bg-gradient-to-b from-green-50 to-white">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center text-white">
+            <FaLeaf className="text-xl" />
+          </div>
+          <h1 className="text-green-800 font-bold text-xl">Inspectify</h1>
+        </div>
+
+        {userName && (
+          <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border border-green-100">
+            <p className="text-green-700 text-xs font-medium mb-2 uppercase tracking-wider">
+              Người dùng hiện tại
+            </p>
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-800 shadow-inner border-2 border-green-200">
+                <span className="text-lg font-semibold">{getInitial(userName)}</span>
+              </div>
+              <div>
+                <p className="text-gray-800 font-medium">{userName}</p>
+                <p className="text-green-600 text-xs font-medium">{displayRole}</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="px-4 py-2">
+        <p className="text-xs font-medium text-green-700 uppercase tracking-wider mb-2 ml-2">
+          Điều hướng
+        </p>
+        <ul className="space-y-1">
+          {navItems.map((item) => (
+            <li
+              key={item.name}
+              onClick={() => handleTabChange(item.name)}
+              className={`p-3 cursor-pointer flex items-center gap-3 rounded-lg transition-all ${
+                activeTab === item.name
+                  ? "bg-green-600 text-white shadow-md"
+                  : "text-gray-700 hover:bg-green-50 hover:text-green-700"
+              }`}
+            >
+              <div className={`${activeTab === item.name ? "text-white" : "text-green-600"}`}>
+                {item.icon}
+              </div>
+              <span className="font-medium">{item.label || item.name}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+export default Sidebar;
