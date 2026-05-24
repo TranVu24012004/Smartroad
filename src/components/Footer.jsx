@@ -76,7 +76,7 @@ const Footer = () => {
               </a>
             </div>
             <p className="text-sm text-gray-500">
-              Email: safestreet386@gmail.com
+              Smartroad225@gmail.com
               <br />
               Điện thoại: +040 7244 527490
             </p>
