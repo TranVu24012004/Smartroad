@@ -144,7 +144,7 @@ const Contact = () => {
                   <p className="text-gray-600">Chúng tôi phản hồi trong vòng 24 giờ làm việc</p>
                 </div>
               </div>
-              <a href="mailto:safestreet386@gmail.com" className="text-green-600 font-medium hover:text-green-700 transition-colors">
+              <a href="mailto:Smartroad225@gmail.com" className="text-green-600 font-medium hover:text-green-700 transition-colors">
                 Smartroad225@gmail.com
               </a>
             </motion.div>
