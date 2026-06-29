@@ -83,10 +83,6 @@
 │   ├── .env.production
 │   └── .evn
 │
-├── temp_hf/
-│   ├── safestreet-road-classifier/
-│   ├── safestreet-vit/
-│   └── safestreet-yolo/
 │
 ├── .gitignore
 ├── eslint.config.js
